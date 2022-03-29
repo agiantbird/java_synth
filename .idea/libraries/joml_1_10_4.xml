@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="joml-1.10.4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/joml-1.10.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-natives-macos.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-openal.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-openal-natives-macos.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-openal-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/libs/joml-1.10.4-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/joml-1.10.4-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-openal-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

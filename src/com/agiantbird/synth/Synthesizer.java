@@ -8,7 +8,6 @@ import java.awt.event.WindowEvent;
 
 public class Synthesizer {
     private boolean shouldGenerate;
-    private int wavePos;
 
     private final Oscillator[] oscillators = new Oscillator[1];
     private final JFrame frame = new JFrame("Synthesizer");
@@ -27,30 +26,32 @@ public class Synthesizer {
         return s;
     });
 
+    private final KeyAdapter keyAdapter = new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (!audioThread.isRunning()) {
+                shouldGenerate = true;
+                audioThread.triggerPlayback();
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            shouldGenerate = false;
+        }
+    };
+
     Synthesizer() {
         int y = 0;
         for (int i = 0; i < oscillators.length; i++) {
-            oscillators[i] = new Oscillator();
+            oscillators[i] = new Oscillator(this);
             oscillators[i].setLocation(5, y);
             frame.add(oscillators[i]);
             y+= 105;
 
         }
 
-        frame.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (!audioThread.isRunning()) {
-                    shouldGenerate = true;
-                    audioThread.triggerPlayback();
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                shouldGenerate = false;
-            }
-        });
+        frame.addKeyListener(keyAdapter);
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -63,6 +64,10 @@ public class Synthesizer {
         frame.setLayout(null);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    public KeyAdapter getKeyAdapter() {
+        return keyAdapter;
     }
 
     public static class AudioInfo {

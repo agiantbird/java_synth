@@ -10,6 +10,7 @@ public class Synthesizer {
     private boolean shouldGenerate;
     private int wavePos;
 
+    private final Oscillator[] oscillators = new Oscillator[1];
     private final JFrame frame = new JFrame("Synthesizer");
     private final AudioThread audioThread = new AudioThread(() -> {
         if (!shouldGenerate) {
@@ -17,15 +18,25 @@ public class Synthesizer {
         }
         short[] s = new short[AudioThread.BUFFER_SIZE];
         for (int i = 0; i < AudioThread.BUFFER_SIZE; i++) {
-            s[i] = (short)(Short.MAX_VALUE * Math.sin((2 * Math.PI * 440) / AudioInfo.SAMPLE_RATE * wavePos++));
+            double d = 0;
+            for (Oscillator o : oscillators) {
+                d += o.nextSample();
+            }
+            s[i] = (short)(Short.MAX_VALUE * d);
         }
         return s;
     });
 
     Synthesizer() {
-        Oscillator o = new Oscillator();
-        o.setLocation(5, 0);
-        frame.add(o);
+        int y = 0;
+        for (int i = 0; i < oscillators.length; i++) {
+            oscillators[i] = new Oscillator();
+            oscillators[i].setLocation(5, y);
+            frame.add(oscillators[i]);
+            y+= 105;
+
+        }
+
         frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {

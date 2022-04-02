@@ -9,7 +9,7 @@ import java.awt.event.WindowEvent;
 public class Synthesizer {
     private boolean shouldGenerate;
 
-    private final Oscillator[] oscillators = new Oscillator[1];
+    private final Oscillator[] oscillators = new Oscillator[3];
     private final JFrame frame = new JFrame("Synthesizer");
     private final AudioThread audioThread = new AudioThread(() -> {
         if (!shouldGenerate) {
@@ -19,7 +19,7 @@ public class Synthesizer {
         for (int i = 0; i < AudioThread.BUFFER_SIZE; i++) {
             double d = 0;
             for (Oscillator o : oscillators) {
-                d += o.nextSample();
+                d += o.nextSample() / oscillators.length;
             }
             s[i] = (short)(Short.MAX_VALUE * d);
         }

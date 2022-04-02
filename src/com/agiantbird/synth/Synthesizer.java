@@ -23,6 +23,9 @@ public class Synthesizer {
     });
 
     Synthesizer() {
+        Oscillator o = new Oscillator();
+        o.setLocation(5, 0);
+        frame.add(o);
         frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {

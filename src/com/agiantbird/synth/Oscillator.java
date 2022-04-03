@@ -3,16 +3,23 @@ package com.agiantbird.synth;
 import com.agiantbird.synth.utils.Utils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Oscillator extends SynthControlContainer {
+
+    private static final int TONE_OFFSET_LIMIT = 2000;
 
     private final Random random = new Random();
 
     private Waveform waveform = Waveform.Sine;
     private double keyFrequency;
     private double frequency;
+    private int toneOffset;
     private int wavePos;
 
     public Oscillator(Synthesizer synth) {
@@ -30,6 +37,35 @@ public class Oscillator extends SynthControlContainer {
         JLabel toneParameter = new JLabel("x0.00");
         toneParameter.setBounds(165, 65, 50, 25);
         toneParameter.setBorder(Utils.WindowDesign.LINE_BORDER);
+        toneParameter.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                final Cursor BLANK_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB),
+                        new Point(0, 0), "blank_cursor");
+                setCursor(BLANK_CURSOR);
+                mouseClickLocation = e.getLocationOnScreen();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                setCursor(Cursor.getDefaultCursor());
+            }
+        });
+        toneParameter.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (mouseClickLocation.y != e.getYOnScreen()) {
+                    boolean mouseMovingUp = mouseClickLocation.y - e.getYOnScreen() > 0;
+                    if (mouseMovingUp && toneOffset < TONE_OFFSET_LIMIT) {
+                        toneOffset++;
+                    } else if (!mouseMovingUp && toneOffset > -TONE_OFFSET_LIMIT) {
+                        // apply tone offset
+                        toneOffset--;
+                    }
+                    toneParameter.setText("x" + String.format("%.3f", getToneOffset()));
+                }
+            }
+        });
         add(toneParameter);
         JLabel toneText = new JLabel("Tone");
         toneText.setBounds(172, 40, 75, 25);
@@ -50,6 +86,10 @@ public class Oscillator extends SynthControlContainer {
     public void setFrequency(double frequency) {
         keyFrequency = this.frequency = frequency;
         // apply tone offset
+    }
+
+    private double getToneOffset() {
+        return toneOffset / 1000d;
     }
 
     public double nextSample() {

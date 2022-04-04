@@ -59,11 +59,12 @@ public class Oscillator extends SynthControlContainer {
                     if (mouseMovingUp && toneOffset < TONE_OFFSET_LIMIT) {
                         toneOffset++;
                     } else if (!mouseMovingUp && toneOffset > -TONE_OFFSET_LIMIT) {
-                        // apply tone offset
+                        applyToneOffset();
                         toneOffset--;
                     }
                     toneParameter.setText("x" + String.format("%.3f", getToneOffset()));
                 }
+                Utils.ParameterHandling.PARAMETER_ROBOT.mouseMove(mouseClickLocation.x, mouseClickLocation.y);
             }
         });
         add(toneParameter);
@@ -83,9 +84,9 @@ public class Oscillator extends SynthControlContainer {
         return frequency;
     }
 
-    public void setFrequency(double frequency) {
+    public void setKeyFrequency(double frequency) {
         keyFrequency = this.frequency = frequency;
-        // apply tone offset
+        applyToneOffset();
     }
 
     private double getToneOffset() {
@@ -109,5 +110,9 @@ public class Oscillator extends SynthControlContainer {
             default:
                 throw new IllegalStateException("Unexpected value: " + waveform);
         }
+    }
+
+    private void applyToneOffset() {
+        frequency = keyFrequency * Math.pow(2, getToneOffset());
     }
 }

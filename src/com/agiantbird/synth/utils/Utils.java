@@ -18,6 +18,19 @@ public class Utils {
         }
     }
 
+    public static class ParameterHandling {
+        public static final Robot PARAMETER_ROBOT;
+
+        static {
+            try {
+                PARAMETER_ROBOT = new Robot();
+            }
+            catch (AWTException e) {
+                throw new ExceptionInInitializerError("Cannot construct a robot instance");
+            }
+        }
+    }
+
     public static class WindowDesign {
         public static final Border LINE_BORDER = BorderFactory.createLineBorder(Color.BLACK);
     }

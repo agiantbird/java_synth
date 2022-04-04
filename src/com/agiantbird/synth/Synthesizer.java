@@ -38,7 +38,7 @@ public class Synthesizer {
         public void keyPressed(KeyEvent e) {
             if (!audioThread.isRunning()) {
                 for (Oscillator o : oscillators) {
-                    // set frequency of o based on the keyEvent
+                    o.setKeyFrequency(KEY_FREQUENCIES.get(e.getKeyChar()));
                 }
                 shouldGenerate = true;
                 audioThread.triggerPlayback();

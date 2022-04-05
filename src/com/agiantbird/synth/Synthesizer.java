@@ -36,6 +36,9 @@ public class Synthesizer {
     private final KeyAdapter keyAdapter = new KeyAdapter() {
         @Override
         public void keyPressed(KeyEvent e) {
+            if(!KEY_FREQUENCIES.containsKey(e.getKeyChar())) {
+                return;
+            }
             if (!audioThread.isRunning()) {
                 for (Oscillator o : oscillators) {
                     o.setKeyFrequency(KEY_FREQUENCIES.get(e.getKeyChar()));

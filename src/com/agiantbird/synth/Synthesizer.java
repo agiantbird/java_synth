@@ -7,7 +7,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.SQLOutput;
 import java.util.HashMap;
 
 public class Synthesizer {
@@ -26,7 +25,7 @@ public class Synthesizer {
         for (int i = 0; i < AudioThread.BUFFER_SIZE; i++) {
             double d = 0;
             for (Oscillator o : oscillators) {
-                d += o.nextSample() / oscillators.length;
+                d += o.getNextSample() / oscillators.length;
             }
             s[i] = (short)(Short.MAX_VALUE * d);
         }

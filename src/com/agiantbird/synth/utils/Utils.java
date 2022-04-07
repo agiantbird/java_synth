@@ -1,8 +1,13 @@
 package com.agiantbird.synth.utils;
 
+import com.agiantbird.synth.SynthControlContainer;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 import static java.lang.Math.*;
 
@@ -28,6 +33,41 @@ public class Utils {
             catch (AWTException e) {
                 throw new ExceptionInInitializerError("Cannot construct a robot instance");
             }
+        }
+
+        public static void addParameterMouseListeners(Component component, SynthControlContainer container, int minVal, int maxVal, int valStep, RefWrapper<Integer> parameter, Procedure onChangeProcedure) {
+            component.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    final Cursor BLANK_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB),
+                            new Point(0, 0), "blank_cursor");
+                    component.setCursor(BLANK_CURSOR);
+                    container.setMouseClickLocation(e.getLocationOnScreen());
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    component.setCursor(Cursor.getDefaultCursor());
+                }
+            });
+            component.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    // if the mouse has moved on the y axis
+                    if (container.getMouseClickLocation().y != e.getYOnScreen()) {
+                        boolean mouseMovingUp = container.getMouseClickLocation().y - e.getYOnScreen() > 0;
+                        if (mouseMovingUp && parameter.val < maxVal) {
+                            parameter.val += valStep;
+                        } else if (!mouseMovingUp && parameter.val > minVal) {
+                            parameter.val -= valStep;
+                        }
+                        if (onChangeProcedure != null) {
+                            handleProcedure(onChangeProcedure, true);
+                        }
+                        PARAMETER_ROBOT.mouseMove(container.getMouseClickLocation().x, container.getMouseClickLocation().y);
+                    }
+                }
+            });
         }
     }
 

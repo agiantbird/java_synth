@@ -5,8 +5,7 @@ import java.awt.*;
 
 public class SynthControlContainer extends JPanel {
 
-    protected Point mouseClickLocation;
-
+    private Point mouseClickLocation;
     protected boolean on;
     private Synthesizer synth;
 
@@ -14,6 +13,13 @@ public class SynthControlContainer extends JPanel {
         this.synth = synth;
     }
 
+    public Point getMouseClickLocation() {
+        return mouseClickLocation;
+    }
+
+    public void setMouseClickLocation(Point mouseClickLocation) {
+        this.mouseClickLocation = mouseClickLocation;
+    }
     public boolean isOn() {
         return on;
     }

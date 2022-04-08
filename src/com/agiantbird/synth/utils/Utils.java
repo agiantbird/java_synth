@@ -35,6 +35,8 @@ public class Utils {
             }
         }
 
+        private ParameterHandling(){}
+
         public static void addParameterMouseListeners(Component component, SynthControlContainer container, int minVal, int maxVal, int valStep, RefWrapper<Integer> parameter, Procedure onChangeProcedure) {
             component.addMouseListener(new MouseAdapter() {
                 @Override
@@ -72,10 +74,12 @@ public class Utils {
     }
 
     public static class WindowDesign {
+        private WindowDesign() {}
         public static final Border LINE_BORDER = BorderFactory.createLineBorder(Color.BLACK);
     }
 
     public static class Math {
+        private Math() {}
         public static double frequencyToAngularFrequency(double freq) {
             return 2 * PI * freq;
         }

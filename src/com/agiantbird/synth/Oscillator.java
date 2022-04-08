@@ -4,17 +4,14 @@ import com.agiantbird.synth.utils.RefWrapper;
 import com.agiantbird.synth.utils.Utils;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
 public class Oscillator extends SynthControlContainer {
 
     private static final int TONE_OFFSET_LIMIT = 2000;
     private WaveTable wavetable = WaveTable.Sine;
     private RefWrapper<Integer> toneOffset = new RefWrapper<>(0);
+    private RefWrapper<Integer> volume = new RefWrapper<>(100);
     private double keyFrequency;
     private int waveTableStepSize;
     private int waveTableIndex;
@@ -34,7 +31,8 @@ public class Oscillator extends SynthControlContainer {
         JLabel toneParameter = new JLabel("x0.00");
         toneParameter.setBounds(165, 65, 50, 25);
         toneParameter.setBorder(Utils.WindowDesign.LINE_BORDER);
-        Utils.ParameterHandling.addParameterMouseListeners(toneParameter, this, -TONE_OFFSET_LIMIT, TONE_OFFSET_LIMIT, 1,toneOffset, () -> {
+        Utils.ParameterHandling.addParameterMouseListeners(toneParameter, this, -TONE_OFFSET_LIMIT, TONE_OFFSET_LIMIT, 1, toneOffset, () ->
+        {
             applyToneOffset();
             toneParameter.setText(" x" + String.format("%.3f", getToneOffset()));
         });
@@ -42,8 +40,16 @@ public class Oscillator extends SynthControlContainer {
         JLabel toneText = new JLabel("Tone");
         toneText.setBounds(172, 40, 75, 25);
         add(toneText);
+        JLabel volumeParameter = new JLabel("100%");
+        volumeParameter.setBounds( 222, 65, 50, 25);
+        volumeParameter.setBorder(Utils.WindowDesign.LINE_BORDER);
+        Utils.ParameterHandling.addParameterMouseListeners(volumeParameter, this, 0, 100, 1, volume, () -> volumeParameter.setText(" " + volume.val + "%"));
+        add(volumeParameter);
+        JLabel volumeText = new JLabel("Volume");
         setSize(279, 100);
         setBorder(Utils.WindowDesign.LINE_BORDER);
+        volumeText.setBounds(225,40,75,25);
+        add(volumeText);
         setLayout(null);
     }
 
@@ -53,7 +59,7 @@ public class Oscillator extends SynthControlContainer {
     }
 
     private double getToneOffset() {
-        return toneOffset.val / 1000d;
+        return toneOffset.val / 1000.0;
     }
 
     public double getNextSample() {

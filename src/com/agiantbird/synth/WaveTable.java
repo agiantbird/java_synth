@@ -18,7 +18,6 @@ enum WaveTable {
             Square.samples[i] = Math.signum(Sine.samples[i]);
             Saw.samples[i] = (float)(2d * (tDivP - Math.floor(0.5 + tDivP)));
             Triangle.samples[i] = (float)(2d * Math.abs(Saw.samples[i]) - 1d);
-            System.out.println(Sine.samples[i]);
         }
     }
 

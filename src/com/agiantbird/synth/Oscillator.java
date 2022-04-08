@@ -9,7 +9,7 @@ import java.awt.event.ItemEvent;
 public class Oscillator extends SynthControlContainer {
 
     private static final int TONE_OFFSET_LIMIT = 2000;
-    private WaveTable wavetable = WaveTable.Sine;
+    private Wavetable wavetable = Wavetable.Sine;
     private RefWrapper<Integer> toneOffset = new RefWrapper<>(0);
     private RefWrapper<Integer> volume = new RefWrapper<>(100);
     private double keyFrequency;
@@ -18,13 +18,13 @@ public class Oscillator extends SynthControlContainer {
 
     public Oscillator(Synthesizer synth) {
         super(synth);
-        JComboBox<WaveTable> comboBox = new JComboBox<>(WaveTable.values());
-        comboBox.setSelectedItem(WaveTable.Sine);
+        JComboBox<Wavetable> comboBox = new JComboBox<>(Wavetable.values());
+        comboBox.setSelectedItem(Wavetable.Sine);
         //bumped width from 75 to 105
         comboBox.setBounds(10, 10, 105, 25);
         comboBox.addItemListener(l -> {
            if (l.getStateChange() == ItemEvent.SELECTED) {
-               wavetable = (WaveTable) l.getItem();
+               wavetable = (Wavetable) l.getItem();
            }
         });
         add(comboBox);
@@ -62,13 +62,17 @@ public class Oscillator extends SynthControlContainer {
         return toneOffset.val / 1000.0;
     }
 
+    private double getVolumeMultiplier() {
+        return volume.val / 100.0;
+    }
+
     public double getNextSample() {
-        double sample = wavetable.getSamples()[waveTableIndex];
-        waveTableIndex = (waveTableIndex + waveTableStepSize) % WaveTable.SIZE;
+        double sample = wavetable.getSamples()[waveTableIndex] * getVolumeMultiplier();
+        waveTableIndex = (waveTableIndex + waveTableStepSize) % Wavetable.SIZE;
         return sample;
     }
 
     private void applyToneOffset() {
-        waveTableStepSize = (int)(WaveTable.SIZE * (keyFrequency * Math.pow(2, getToneOffset()))/ Synthesizer.AudioInfo.SAMPLE_RATE);
+        waveTableStepSize = (int)(Wavetable.SIZE * (keyFrequency * Math.pow(2, getToneOffset()))/ Synthesizer.AudioInfo.SAMPLE_RATE);
     }
 }

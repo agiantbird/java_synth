@@ -2,7 +2,7 @@ package com.agiantbird.synth;
 
 import com.agiantbird.synth.utils.Utils;
 
-enum WaveTable {
+enum Wavetable {
     Sine, Square, Saw, Triangle;
 
     static final int SIZE = 8192;
